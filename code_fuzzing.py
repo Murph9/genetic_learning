@@ -6,11 +6,12 @@
 import string
 import subject
 import random
+import itertools
 
-GENERATIONS = 100
+GENERATIONS = 600
 POP_COUNT = 50
-TARGET = 991
 MUTATION_RATE = 0.3
+TARGET = 3.14159 # PI
 
 def _generate_start(count: int):
     return [subject.Subject() for i in range(POP_COUNT)]
@@ -21,7 +22,7 @@ subjects = _generate_start(POP_COUNT)
 
 for generation in range(GENERATIONS):
     print(f'running generation {generation}:')
-    #aa: for s in subjects: print("  "+','.join(str(s) for s in s.args) + ' -> ' + str(s.evaluate()))
+    #[print(x) for x in subjects]
 
     weighted_subjects = []
     for s in subjects:
@@ -31,7 +32,7 @@ for generation in range(GENERATIONS):
             weighted_subjects.append((s, value))
 
     # select the top 4 and mutate them
-    best_value = sorted(weighted_subjects, key=lambda x: x[1])[:4] # find the closest to the target (i.e. 0)
+    best_value = sorted(weighted_subjects, key=lambda x: x[1])[:4] # find the closest N to the target (i.e. 0)
     subjects_best = list(f[0] for f in best_value)
     
     print(f"Best value {best_value[0][1]} as {best_value[0][0]}")
@@ -39,10 +40,16 @@ for generation in range(GENERATIONS):
         print('target hit, finish.')
         break
     
+    # add combinations of the best N
     subjects = subjects_best[:]
-    for _x in range(POP_COUNT - 4):
-        a = random.choice(subjects_best)
-        b = random.choice(subjects_best)
-        while a == b: # prevent them from being the same
-            b = random.choice(subjects_best)
-        subjects.append(a.mutate(b, MUTATION_RATE))
+    for _y in itertools.combinations(subjects_best, 2):
+        subjects.append(_y[0].mutate(_y[1], MUTATION_RATE))
+
+    
+    # add some 'mutations'
+    for x in range(POP_COUNT - len(subjects)):
+        s = random.choice(subjects)
+        subjects.append(s.mutate(s, MUTATION_RATE))
+        
+
+[print(x) for x in subjects]
