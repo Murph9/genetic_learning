@@ -30,6 +30,14 @@ class Subject:
     def count(self):
         return len(self.args)
 
+    def __hash__(self):
+        return hash(str(self.args))
+
+    def __eq__(self, other):
+        if not isinstance(other, Subject) or other == None:
+            return False
+        return self.args == other.args
+      
     def mutate(self, other: Subject, mut_rate: float) -> Subject:
         result = _mix_lists(self.args, other.args)
         for x in range(len(result)):
