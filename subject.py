@@ -15,13 +15,15 @@ class Subject:
         self.args = args
         if not self.args:
             self.args = [
-                random.randint(0, 100),
-                random.randint(0, 100),
-                random.randint(0, 100),
-                random.randint(0, 100),
+                random.uniform(0, 100),
                 random.choice(OPERATORS),
+                random.uniform(0, 100),
                 random.choice(OPERATORS),
-                random.choice(OPERATORS)
+                random.uniform(0, 100),
+                random.choice(OPERATORS),
+                random.uniform(0, 100),
+                random.choice(OPERATORS),
+                random.uniform(0, 100)
             ]
 
     @property
@@ -32,17 +34,19 @@ class Subject:
         result = _mix_lists(self.args, other.args)
         for x in range(len(result)):
             if random.uniform(0, 1) < mut_rate:
-                if isinstance(result[x], int):
-                    result[x] = random.randint(0, 100)
+                if isinstance(result[x], float):
+                    result[x] = random.uniform(0, 100)
                 else:
                     result[x] = random.choice(OPERATORS)
 
         return Subject(args=result)
 
+    def _generate_str(self):
+        return ' '.join(str(x) for x in self.args)
+
     def evaluate(self):
-        _str = BASE_STRING.format(*self.args)
         try:
-            return self._eval(ast.parse(_str, mode='eval').body)
+            return self._eval(ast.parse(self._generate_str(), mode='eval').body)
         except ZeroDivisionError:
             return None
 
@@ -57,7 +61,7 @@ class Subject:
             raise TypeError(node)
 
     def __str__(self):
-        return f"'{BASE_STRING.format(*self.args)}' -> {self.evaluate()}"
+        return f"'{self._generate_str()}' -> {self.evaluate()}"
 
 def _mix_lists(list1, list2, ratio = 0.5):
     if len(list1) != len(list2):
