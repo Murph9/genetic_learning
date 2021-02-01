@@ -1,24 +1,27 @@
-import importlib
-import glob
+import ntpath
 import os
+import sys
+import tempfile
 
-def _create_fuzz():
-    return 
+FUNC_NAME = 'func'
 
-print('Removing old fuzz files')
-files = glob.glob('.\\fuzz\\*')
-for f in (x for x in files if not x.endswith("__")):
-    print(f"removing {f}")
-    os.remove(f)
-print('Done')
 
-with open('.\\fuzz\\test.py', 'w') as file:
-    file.write("""
-def func():
-    return 'yo'
-""")
-print('created file .\\fuzz\\test.py')
-print('----- running file')
+def _create_func(arg):
+    return f"""
+def {FUNC_NAME}():
+    return 'yo: {arg}'
+"""
 
-fuzz = importlib.import_module('fuzz.test')
-print(fuzz.func())
+
+# creates a temp folder, fills it with python files and runs them all
+with tempfile.TemporaryDirectory() as tmp_dir:
+    files = []
+    for i in range(12):
+        with open(f'{tmp_dir}\\{i}.py', 'w') as file:
+            file.write(_create_func(i))
+            files.append(ntpath.basename(file.name))
+
+    sys.path.append(tmp_dir)
+    for f in files:
+        mod = __import__(os.path.splitext(f)[0])
+        print(getattr(mod, FUNC_NAME)())
