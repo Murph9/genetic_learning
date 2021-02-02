@@ -3,9 +3,7 @@ import random
 import ast
 import operator as op
 
-BASE_STRING = "{0} {4} {1} {5} {2} {6} {3}"
 OPERATORS = '+*-/'
-
 operators = {ast.Add: op.add, ast.Sub: op.sub, ast.Mult: op.mul,
              ast.Div: op.truediv, ast.Pow: op.pow, ast.BitXor: op.xor,
              ast.USub: op.neg}
