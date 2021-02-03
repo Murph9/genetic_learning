@@ -10,6 +10,7 @@ import itertools
 
 GENERATIONS = 200
 POP_COUNT = 50
+BEST_POP_COUNT = 4
 MUTATION_RATE = 0.3
 TARGET = 3.14159 # PI
 
@@ -31,8 +32,8 @@ for generation in range(GENERATIONS):
             value = _eval_with_target(result)
             weighted_subjects.append((s, value))
 
-    # select the top 4 (with no duplicates) and mutate them
-    best_value = sorted(set(weighted_subjects), key=lambda x: x[1])[:4] # find the closest N to the target (i.e. 0)
+    # select the top N (with no duplicates) and mutate them
+    best_value = sorted(set(weighted_subjects), key=lambda x: x[1])[:BEST_POP_COUNT] # find the closest N to the target (i.e. 0)
     subjects_best = list(f[0] for f in best_value)
     
     print(f"Best value {best_value[0][1]} as {best_value[0][0]}")
