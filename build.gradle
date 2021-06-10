@@ -1,0 +1,13 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'genetics.Genetic'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/io.jenetics/jenetics
+    implementation group: 'io.jenetics', name: 'jenetics', version: '6.2.0'
+}
