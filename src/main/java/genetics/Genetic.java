@@ -4,6 +4,7 @@ import io.jenetics.Phenotype;
 import io.jenetics.engine.Engine;
 import io.jenetics.engine.EvolutionResult;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Genetic {
     public static void main(String[] args) {
 

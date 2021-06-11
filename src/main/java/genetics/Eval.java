@@ -1,8 +1,5 @@
 package genetics;
 
-import java.util.Arrays;
-import java.util.List;
-
 import io.jenetics.Chromosome;
 import io.jenetics.DoubleChromosome;
 import io.jenetics.Genotype;
@@ -10,9 +7,11 @@ import io.jenetics.IntegerChromosome;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Eval {
+    private static final double TARGET = Math.PI;
+    private static final int ENCODING_LENGTH = 3;
     public static final Genotype ENCODING = Genotype.of(
-        DoubleChromosome.of(0, 100, 5),
-        (Chromosome)IntegerChromosome.of(0, 3, 4)
+        DoubleChromosome.of(0, 100, ENCODING_LENGTH + 1),
+        (Chromosome)IntegerChromosome.of(0, 3, ENCODING_LENGTH)
     );
     
     public static double fitness(final Genotype gt) {
@@ -24,7 +23,7 @@ public class Eval {
             total = fitness_eval(total, operations.get(i).intValue(), numbers.get(i+1).doubleValue());
         }
         
-        return - Math.abs(3.14159 - total);
+        return - Math.abs(TARGET - total);
     }
 
     private static double fitness_eval(double existing, int value, double newValue) {
