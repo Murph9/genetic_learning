@@ -1,5 +1,7 @@
 package genetics;
 
+import java.util.concurrent.CompletableFuture;
+
 import io.jenetics.Chromosome;
 import io.jenetics.DoubleChromosome;
 import io.jenetics.Genotype;
@@ -14,7 +16,11 @@ public class Eval {
         (Chromosome)IntegerChromosome.of(0, 3, ENCODING_LENGTH)
     );
     
-    public static double fitness(final Genotype gt) {
+    public static CompletableFuture<Double> asyncFitness(final Genotype gt) {
+        return CompletableFuture.completedFuture(fitness(gt));
+    }
+
+    private static double fitness(final Genotype gt) {
         DoubleChromosome numbers = (DoubleChromosome)gt.get(0);
         IntegerChromosome operations = (IntegerChromosome)gt.get(1);
 
